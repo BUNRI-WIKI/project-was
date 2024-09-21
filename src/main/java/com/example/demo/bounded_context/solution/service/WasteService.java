@@ -3,13 +3,17 @@ package com.example.demo.bounded_context.solution.service;
 import com.example.demo.base.exception.CustomException;
 import com.example.demo.base.exception.ExceptionCode;
 import com.example.demo.bounded_context.account.entity.Account;
+import com.example.demo.bounded_context.questionBoard.dto.PageQuestionBoardDto;
+import com.example.demo.bounded_context.solution.dto.PageWasteDto;
 import com.example.demo.bounded_context.solution.entity.ContributedCreationState;
 import com.example.demo.bounded_context.solution.entity.Waste;
 import com.example.demo.bounded_context.solution.repository.WasteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -82,5 +86,19 @@ public class WasteService {
     @Transactional
     public void updateWriter(Account writer){
         wasteRepository.updateWriter(writer);
+    }
+
+
+    /**
+     * Tag, Waste로 검색
+     */
+    public Page<PageWasteDto> WandTSearch(Pageable pageable, String keyword) {
+        int page = pageable.getPageNumber() - 1; // page 위치에 있는 값은 0부터 시작한다.
+        int pageLimit = 10; // 한페이지에 보여줄 waste 개수
+        Page<Waste> wastePages;
+        wastePages = wasteRepository.findDistinctByWasteNameOrTagNameContaining(keyword, PageRequest.of(page, pageLimit));
+
+        return wastePages.map(
+                PageWasteDto::new);
     }
 }

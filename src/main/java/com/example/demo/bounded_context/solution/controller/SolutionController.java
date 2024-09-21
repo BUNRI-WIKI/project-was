@@ -5,6 +5,8 @@ import com.example.demo.bounded_context.solution.dto.DetectResponse;
 import com.example.demo.bounded_context.solution.api.SolutionApi;
 import com.example.demo.bounded_context.solution.dto.*;
 import com.example.demo.bounded_context.solution.service.SolutionUseCase;
+import com.example.demo.bounded_context.solution.service.WasteService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,8 +20,10 @@ import java.net.URLDecoder;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/solution")
 public class SolutionController implements SolutionApi {
     private final SolutionUseCase solutionUseCase;
+    private final WasteService wasteService;
 
     public ResponseEntity<DetectResponse> searchByImage(@RequestParam("imageUrl") String imageUrlEncoding) {
         try{
@@ -67,4 +71,17 @@ public class SolutionController implements SolutionApi {
         Long rejectSolutionId = solutionUseCase.reject(wasteId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(rejectSolutionId);
     }
+
+
+    @GetMapping("/search")
+    @Operation(summary = "강화검색", description = "/search?keyword=검색할것 Tag, Waste 한번에 검색 -> 커뮤니티 검색 -> 글작성")
+    public ResponseEntity<?> searchWaste(@PageableDefault(page = 1) Pageable pageable,
+                                         @RequestParam("keyword") String keyword) {
+        if(keyword==null)
+            return ResponseEntity.ok("검색할 키워드를 입력해주세요");
+        Page<PageWasteDto> wastePages = wasteService.WandTSearch(pageable,keyword);
+
+        return ResponseEntity.ok(wastePages);
+    }
+
 }
