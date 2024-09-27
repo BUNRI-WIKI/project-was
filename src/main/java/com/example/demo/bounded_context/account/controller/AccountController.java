@@ -3,6 +3,7 @@ package com.example.demo.bounded_context.account.controller;
 import com.example.demo.base.Resolver.AccessToken;
 import com.example.demo.base.Resolver.AuthorizationHeader;
 import com.example.demo.base.common.AuthConstants;
+import com.example.demo.bounded_context.account.dto.AccountDuplicateDto;
 import com.example.demo.bounded_context.account.dto.AccountResponse;
 import com.example.demo.bounded_context.account.dto.AccountUpdateRequest;
 import com.example.demo.bounded_context.account.repository.AccountRepository;
@@ -41,8 +42,8 @@ public class AccountController {
 
     @PostMapping("/duplicate-test/id")
     @Operation(summary = "아이디 중복검사", description = "아이디 중복검사")
-    public ResponseEntity<?> testId(@RequestBody String id) {
-        if(accountRepository.findByAccountName(id).isEmpty())
+    public ResponseEntity<?> testId(@RequestBody AccountDuplicateDto dto) {
+        if(accountRepository.findByAccountName(dto.getDuplicate()).isEmpty())
             return ResponseEntity.ok().body("사용가능한 아이디 입니다.");
         else
             return ResponseEntity.ok().body("중복된 아이디 입니다.");
@@ -50,8 +51,8 @@ public class AccountController {
 
     @PostMapping("/duplicate-test/email")
     @Operation(summary = "이메일 중복검사", description = "이메일 중복검사")
-    public ResponseEntity<?> testEmail(@RequestBody String email) {
-        if(accountRepository.findByEmail(email).isEmpty())
+    public ResponseEntity<?> testEmail(@RequestBody AccountDuplicateDto dto) {
+        if(accountRepository.findByEmail(dto.getDuplicate()).isEmpty())
             return ResponseEntity.ok().body("사용가능한 이메일 입니다.");
         else
             return ResponseEntity.ok().body("중복된 이메일 입니다.");
@@ -60,8 +61,8 @@ public class AccountController {
 
     @PostMapping("/duplicate-test/nickname")
     @Operation(summary = "닉네임 중복검사", description = "닉네임 중복검사")
-    public ResponseEntity<?> testNickName(@RequestBody String NickName) {
-        if(accountRepository.findByNickname(NickName).isEmpty())
+    public ResponseEntity<?> testNickName(@RequestBody AccountDuplicateDto dto) {
+        if(accountRepository.findByNickname(dto.getDuplicate()).isEmpty())
             return ResponseEntity.ok().body("사용가능한 닉네임 입니다.");
         else
             return ResponseEntity.ok().body("중복된 닉네임 입니다.");
