@@ -23,6 +23,18 @@ public class AccountService {
     }
 
     @Transactional(readOnly = true)
+    public Account findByEmail(String email){ //loadByEmail
+        return accountRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(ExceptionCode.ACCOUNT_NOT_FOUND));
+    }
+
+    @Transactional(readOnly = true)
+    public Account findByNickName(String nickName){ //loadByNickName
+        return accountRepository.findByNickname(nickName)
+                .orElseThrow(() -> new CustomException(ExceptionCode.ACCOUNT_NOT_FOUND));
+    }
+
+    @Transactional(readOnly = true)
     public Account findByAccountId(Long accountId){
         return accountRepository.findById(accountId)
                 .orElseThrow(() -> new CustomException(ExceptionCode.ACCOUNT_NOT_FOUND));

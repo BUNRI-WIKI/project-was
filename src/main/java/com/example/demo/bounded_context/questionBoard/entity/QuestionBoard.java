@@ -30,6 +30,8 @@ public class QuestionBoard extends BaseTimeEntity {
 
     private String imageUrl; //참조X 자체컬럼
 
+    private String nickName;
+
     private boolean adopted; //채택유무
 
     @JoinColumn(name = "ADOPTED_COMMENT_ID", nullable = true)
@@ -53,7 +55,7 @@ public class QuestionBoard extends BaseTimeEntity {
     private Integer view; //추천수, 추천기능을 위해선 엔티티를 하나 더 작성해야한다고 생각,,(멤버,보드 관계엔티티로써)
 
     @Builder
-    public QuestionBoard(String title, String content, Integer recommend, Account writer, String imageUrl, Boolean adopted , Integer view){
+    public QuestionBoard(String title, String content, Integer recommend, Account writer, String imageUrl, Boolean adopted , Integer view, String nickName){
         this.title = title;
         this.content = content;
         this.recommend = recommend;
@@ -61,6 +63,7 @@ public class QuestionBoard extends BaseTimeEntity {
         this.imageUrl = imageUrl;
         this.adopted = adopted;
         this.view = view;
+        this.nickName = nickName;
     }
 
     public void update(UpdateQuestionBoardDto updateQuestionBoardDto) {

@@ -11,4 +11,5 @@ public interface RecycleBoardRepository extends JpaRepository<RecycleBoard, Long
 
     Page<RecycleBoard> findByTitleContaining(String title, Pageable pageable);
 
+    Page<RecycleBoard> findByNickName(String nickName, Pageable pageable);
 }

@@ -54,15 +54,19 @@ public class QuestionBoardController {
         return ResponseEntity.ok(boardPages);
     }
 
-    @GetMapping("/search/{option}/paging")
-    @Operation(summary = "Q&A 게시글 검색", description = "/search/option/paging?page=번호(1~)&keyword=검색내용,{option}1-최신순,2-추천순,3-조회순")
+    @GetMapping("/search/{option1}/{option2}/paging")
+    @Operation(summary = "Q&A 게시글 검색", description = "paging?page=번호(1~)&keyword=검색내용,{option1}1-최신순,2-추천순,3-조회순 // {option2}1-제목포함검색, 2-닉네임검색")
     public ResponseEntity<?> searchPage(@PageableDefault(page = 1) Pageable pageable,
-                                        @PathVariable Integer option,
+                                        @PathVariable Integer option1,
+                                        @PathVariable Integer option2,
                                         @RequestParam("keyword") String keyword) {
-        System.out.println(keyword);
         if(keyword==null)
             return ResponseEntity.ok("검색할 키워드를 입력해주세요");
-        Page<PageQuestionBoardDto> boardPages = questionBoardService.search(pageable,option,keyword);
+        Page<PageQuestionBoardDto> boardPages;
+        if(option2==1)
+            boardPages = questionBoardService.titleSearch(pageable,option1,keyword);
+        else
+            boardPages = questionBoardService.nickNameSearch(pageable,option1,keyword);
 
         return ResponseEntity.ok(boardPages);
     }

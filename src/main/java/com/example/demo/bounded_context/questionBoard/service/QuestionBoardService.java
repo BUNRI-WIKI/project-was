@@ -35,6 +35,7 @@ public class QuestionBoardService {
                 .adopted(false)
                 .writer(writer)
                 .view(0)
+                .nickName(writer.getNickname())
                 .build();
 
         questionBoardRepository.save(questionBoard);
@@ -104,7 +105,7 @@ public class QuestionBoardService {
                 PageQuestionBoardDto::new);
     }
 
-    public Page<PageQuestionBoardDto> search(Pageable pageable, Integer option, String keyword) {
+    public Page<PageQuestionBoardDto> titleSearch(Pageable pageable, Integer option, String keyword) {
         int page = pageable.getPageNumber() - 1; // page 위치에 있는 값은 0부터 시작한다.
         int pageLimit = 10; // 한페이지에 보여줄 글 개수
         Page<QuestionBoard> questionBoardPages;
@@ -116,6 +117,24 @@ public class QuestionBoardService {
         }
         else{
             questionBoardPages = questionBoardRepository.findByTitleContaining(keyword,PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "view","createdDate")));
+        }
+
+        return questionBoardPages.map(
+                PageQuestionBoardDto::new);
+    }
+
+    public Page<PageQuestionBoardDto> nickNameSearch(Pageable pageable, Integer option, String nickName) {
+        int page = pageable.getPageNumber() - 1; // page 위치에 있는 값은 0부터 시작한다.
+        int pageLimit = 10; // 한페이지에 보여줄 글 개수
+        Page<QuestionBoard> questionBoardPages;
+        if(option==1) {
+            questionBoardPages = questionBoardRepository.findByNickName(nickName,PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "createdDate")));
+        }
+        else if(option==2){
+            questionBoardPages = questionBoardRepository.findByNickName(nickName,PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "recommend","createdDate")));
+        }
+        else{
+            questionBoardPages = questionBoardRepository.findByNickName(nickName,PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "view","createdDate")));
         }
 
         return questionBoardPages.map(

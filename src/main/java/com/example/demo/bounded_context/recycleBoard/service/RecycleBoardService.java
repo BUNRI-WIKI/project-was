@@ -36,6 +36,7 @@ public class RecycleBoardService {
                 .collection(false)
                 .writer(writer)
                 .view(0)
+                .nickName(writer.getNickname())
                 .build();
 
         recycleBoardRepository.save(recycleBoard);
@@ -97,7 +98,7 @@ public class RecycleBoardService {
                 PageRecycleBoardDto::new);
     }
 
-    public Page<PageRecycleBoardDto> search(Pageable pageable, Integer option, String keyword) {
+    public Page<PageRecycleBoardDto> titleSearch(Pageable pageable, Integer option, String keyword) {
         int page = pageable.getPageNumber() - 1; // page 위치에 있는 값은 0부터 시작한다.
         int pageLimit = 10; // 한페이지에 보여줄 글 개수
         Page<RecycleBoard> recycleBoardPages;
@@ -106,6 +107,21 @@ public class RecycleBoardService {
         }
         else{
             recycleBoardPages = recycleBoardRepository.findByTitleContaining(keyword,PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "view","createdDate")));
+        }
+
+        return recycleBoardPages.map(
+                PageRecycleBoardDto::new);
+    }
+
+    public Page<PageRecycleBoardDto> nickNameSearch(Pageable pageable, Integer option, String nickName) {
+        int page = pageable.getPageNumber() - 1; // page 위치에 있는 값은 0부터 시작한다.
+        int pageLimit = 10; // 한페이지에 보여줄 글 개수
+        Page<RecycleBoard> recycleBoardPages;
+        if(option==1) {
+            recycleBoardPages = recycleBoardRepository.findByNickName(nickName,PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "createdDate")));
+        }
+        else{
+            recycleBoardPages = recycleBoardRepository.findByNickName(nickName,PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "view","createdDate")));
         }
 
         return recycleBoardPages.map(

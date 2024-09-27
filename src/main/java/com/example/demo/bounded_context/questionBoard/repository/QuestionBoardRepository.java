@@ -14,4 +14,5 @@ public interface QuestionBoardRepository extends JpaRepository<QuestionBoard, Lo
     @Query("SELECT q FROM QuestionBoard q WHERE q.title LIKE %:title%")
     Page<QuestionBoard> findByTitleContaining(String title, Pageable pageable);
 
+    Page<QuestionBoard> findByNickName(String nickName, Pageable pageable);
 }
