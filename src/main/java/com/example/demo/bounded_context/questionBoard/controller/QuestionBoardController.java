@@ -46,7 +46,7 @@ public class QuestionBoardController {
 
     // @PageableDefault(page = 1) : page는 기본으로 1페이지를 보여준다.
     @GetMapping("/read/{option}/paging")
-    @Operation(summary = "Q&A 게시글 페이징", description = "/read/option/paging?page=번호(1~),{option}1-최신순,2-추천순,3-조회순")
+    @Operation(summary = "Q&A 게시글 페이징", description = "/read/option/paging?page=번호(1~),{option}1-최신순,2-추천순,3-조회순,4-오래된순")
     public ResponseEntity<?> readPage(@PageableDefault(page = 1) Pageable pageable,
                                       @PathVariable Integer option) {
         Page<PageQuestionBoardDto> boardPages = questionBoardService.paging(pageable,option);

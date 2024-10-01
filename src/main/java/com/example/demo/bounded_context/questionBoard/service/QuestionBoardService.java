@@ -97,8 +97,11 @@ public class QuestionBoardService {
         else if(option==2){
             questionBoardPages = questionBoardRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "recommend","createdDate")));
         }
-        else{
+        else if(option==3){
             questionBoardPages = questionBoardRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "view","createdDate")));
+        }
+        else{
+            questionBoardPages = questionBoardRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.ASC, "createdDate")));
         }
 
         return questionBoardPages.map(
