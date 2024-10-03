@@ -64,7 +64,7 @@ public class S3ImageService {
     private String uploadImageToS3(MultipartFile image) throws IOException {
         String extension = validateImageFileExtension(image);
 
-        String s3FileName = UUID.randomUUID().toString().substring(0, 10) + image.getOriginalFilename(); //변경된 파일 명
+        String s3FileName = "midas-service/keywords/"+UUID.randomUUID().toString().substring(0, 10) + image.getOriginalFilename(); //변경된 파일 명
 
         InputStream inputStreams = image.getInputStream();
         byte[] bytes = IOUtils.toByteArray(inputStreams);
@@ -77,8 +77,7 @@ public class S3ImageService {
 
         try{
             PutObjectRequest putObjectRequest =
-                    new PutObjectRequest(bucketName, s3FileName, byteArrayInputStream, metadata)
-                            .withCannedAcl(CannedAccessControlList.PublicRead);
+                    new PutObjectRequest(bucketName, s3FileName, byteArrayInputStream, metadata);
             amazonS3.putObject(putObjectRequest); // put image to S3
         }catch (Exception e){
             throw new IllegalArgumentException("ErrorCode.PUT_OBJECT_EXCEPTION");
