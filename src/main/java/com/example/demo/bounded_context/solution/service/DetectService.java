@@ -25,7 +25,7 @@ public class DetectService {
                 .build();
 
         return webClient.method(HttpMethod.GET)
-                .uri("/models/image-detection")
+                .uri("/yolo/prediction")
                 .bodyValue(request)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
