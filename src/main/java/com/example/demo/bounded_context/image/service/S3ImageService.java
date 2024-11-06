@@ -64,7 +64,7 @@ public class S3ImageService {
     private String uploadImageToS3(MultipartFile image) throws IOException {
         String extension = validateImageFileExtension(image);
 
-        String s3FileName = "midas-service/keywords/"+UUID.randomUUID().toString().substring(0, 10) + image.getOriginalFilename(); //변경된 파일 명
+        String s3FileName = "image/"+UUID.randomUUID().toString().substring(0, 10) + image.getOriginalFilename(); //변경된 파일 명
 
         InputStream inputStreams = image.getInputStream();
         byte[] bytes = IOUtils.toByteArray(inputStreams);
