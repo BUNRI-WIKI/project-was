@@ -4,6 +4,7 @@ import com.example.demo.base.common.BaseTimeEntity;
 import com.example.demo.bounded_context.account.entity.Account;
 import com.example.demo.bounded_context.questionBoard.entity.QuestionBoard;
 import com.example.demo.bounded_context.recommendComment.entity.RecommendComment;
+import com.example.demo.bounded_context.declareQcomment.entity.DeclareQcomment;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -36,6 +37,9 @@ public class QuestionComment extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "questionComment", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) //게시글 삭제시 삭제
     private List<RecommendComment> recommendCommentList;
+
+    @OneToMany(mappedBy = "questionComment", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) //게시글 삭제시 삭제
+    private List<DeclareQcomment> declareQcommentList;
 
     @Builder
     public QuestionComment(String content, Integer recommend, QuestionBoard questionBoard, Account writer){
