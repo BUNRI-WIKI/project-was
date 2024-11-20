@@ -29,7 +29,9 @@ public class SolutionController implements SolutionApi {
         try{
             String imageUrl = URLDecoder.decode(imageUrlEncoding, "UTF-8");
             DetectResponse detectResponse = solutionUseCase.searchByImage(imageUrl);
-            return ResponseEntity.ok().body(detectResponse);
+            return ResponseEntity.ok()
+                    .header("ngrok-skip-browser-warning","69420")
+                    .body(detectResponse);
         }catch (UnsupportedEncodingException e){
             throw new IllegalArgumentException("Invalid image URL");
         }
