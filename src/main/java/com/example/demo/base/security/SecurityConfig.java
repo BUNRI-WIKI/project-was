@@ -34,6 +34,7 @@ public class SecurityConfig {
     private final BlacklistTokenService blacklistTokenService;
     private final AccountService accountService;
 
+    /*
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -56,6 +57,31 @@ public class SecurityConfig {
 //                                "/api/wiki/{id}/rejected",
 //                                "/api/solution/{id}/accepted",
 //                                "/api/solution{id}/rejected").hasRole("ADMIN")
+                        .anyRequest().permitAll())
+                .addFilterBefore(new JwtTokenFilter(jwtProvider, blacklistTokenService, objectMapper, accountService), UsernamePasswordAuthenticationFilter.class)
+                .formLogin(withDefaults())
+                .httpBasic(withDefaults());
+
+        return http.build();
+    }*/
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .cors(cors -> cors.configurationSource(new CorsConfigurationSource() {
+                    @Override
+                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                        CorsConfiguration config = new CorsConfiguration();
+                        config.setAllowedOrigins(Collections.singletonList("https://trash-front-sk3w.vercel.app"));  // 특정 도메인 허용
+                        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+                        config.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
+                        config.setExposedHeaders(Collections.singletonList("Authorization"));
+                        config.setAllowCredentials(true);  // 자격 증명 허용
+                        config.setMaxAge(3600L);
+                        return config;
+                    }
+                }))
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(request -> request
                         .anyRequest().permitAll())
                 .addFilterBefore(new JwtTokenFilter(jwtProvider, blacklistTokenService, objectMapper, accountService), UsernamePasswordAuthenticationFilter.class)
                 .formLogin(withDefaults())
